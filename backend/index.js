@@ -12,5 +12,5 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/notes", require("./routes/note"));
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`iNoteBoOk Backend listening at http://localhost:${port}`);
 });
