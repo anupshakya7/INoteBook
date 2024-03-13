@@ -2,12 +2,18 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import noteContext from "../context/notes/noteContext";
 import NoteItem from "./NoteItem";
 import AddNote from "./AddNote";
+import { useNavigate } from "react-router-dom";
 
-const Notes = () => {
+const Notes = (props) => {
   const context = useContext(noteContext);
+  let history = useNavigate();
   const { notes, getNotes, editNote } = context;
   useEffect(() => {
-    getNotes();
+    if(localStorage.getItem('token')){
+      getNotes();
+    }else{
+      history("/login");
+    }
   }, []);
   // eslint-disable-next-line
 
@@ -34,14 +40,15 @@ const Notes = () => {
     e.preventDefault();
     editNote(note.id, note.etitle, note.edescription, note.etag);
     refClose.current.click();
+    props.showAlert("Updated Successfully!!!","success");
   };
 
   const onChange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value });
   };
   return (
-    <>
-      <AddNote />
+    <div className="mt-5">
+      <AddNote  showAlert={props.showAlert}/>
       <button
         ref={ref}
         type="button"
@@ -150,12 +157,12 @@ const Notes = () => {
           </div>
           {notes.map((note) => {
             return (
-              <NoteItem key={note._id} updateNote={updateNote} note={note} />
+              <NoteItem key={note._id} updateNote={updateNote} showAlert={props.showAlert} note={note} />
             );
           })}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
